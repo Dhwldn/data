@@ -1,0 +1,23 @@
+#include <SoftwareSerial.h>
+
+// PMS7003 센서의 RX와 TX 핀 설정
+SoftwareSerial pmsSerial(2, 3); // RX, TX
+
+// 데이터 패킷 구조체
+struct pms7003data {
+  uint16_t frame_length;
+  uint16_t pm1_0;
+  uint16_t pm2_5;
+  uint16_t pm10;
+  uint16_t pm1_0_atm;
+  uint16_t pm2_5_atm;
+  uint16_t pm10_atm;
+  uint16_t reserved[3];
+  uint16_t checksum;
+};
+
+// 함수: 데이터 패킷 수신
+bool readPMSdata(pms7003data &data) {
+  if (pmsSerial.available() >= 32) {
+    if (pmsSerial.read() == 0x42 && pmsSerial.read() == 0x4D) {
+      uint8_t buff
